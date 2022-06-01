@@ -4,12 +4,9 @@ import Router from 0xf8d6e0586b0a20c7
 
 transaction() {
     let vaultRef: &{FungibleToken.Provider}
-    // let vaultRef:Capability<&{FungibleToken.Provider}>
     let vaultStoragePath:StoragePath
     prepare(acct: AuthAccount) {
         self.vaultStoragePath= /storage/exampleTokenVault
-        // self.vaultRef = acct.borrow<&ExampleToken.Vault>(from: self.vaultStoragePath)
-                                // ?? panic("Could not borrow a reference to the owner's vault")
         self.vaultRef = acct.borrow<&{FungibleToken.Provider}>(from:self.vaultStoragePath)
                                 ?? panic("Could not borrow a reference to the owner's vault")
 
