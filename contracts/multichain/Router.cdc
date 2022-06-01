@@ -45,23 +45,22 @@ pub contract Router {
             Router.anyTokens.remove(key:key)
         }
 
-        pub fun swapIn(token:String,fromChainId:UInt64,amount:UFix64,receive: [Capability<&{FungibleToken.Receiver}>;2]){
+        pub fun swapIn(token:String,fromChainId:UInt64,amount:UFix64,receivePaths: [Capability<&{FungibleToken.Receiver}>;2]){
             pre {
                 Router.anyTokens.containsKey(token):
                     "Router not exists for this token"
             }
             let routerForToken=Router.anyTokens[token]!.borrow()
                 ??panic("get router for capability fails")
-            var receiveRef=receive[0].borrow()
+            var receiveRef=receivePaths[0].borrow()
                 ??panic("get receive for capability fails")
             let swapVault<-routerForToken.mint(amount:amount)
-            emit LogSwapIn(token:token,to:receive[0].address,amount:swapVault.balance,fromChainId:fromChainId,toChainId:Router.chainId)
+            emit LogSwapIn(token:token,to:receivePaths[0].address,amount:swapVault.balance,fromChainId:fromChainId,toChainId:Router.chainId)
             if (swapVault.getType().identifier!=receiveRef.getType().identifier){
-                receiveRef=receive[1].borrow()
+                receiveRef=receivePaths[1].borrow()
                     ??panic("get receive for capability fails")
             }
-            receiveRef.deposit(from: <-swapVault)        
-
+            receiveRef.deposit(from: <-swapVault)
         }
 
         pub fun createNewMpc():@Mpc{
