@@ -17,6 +17,7 @@ transaction() {
     }
 
     execute {
+        log("token".concat(AnyExampleToken.Vault.getType().identifier))
         self.mpcRef.swapIn(token:AnyExampleToken.Vault.getType().identifier,fromChainId:1,amount:10.0,receive:self.receiverRef)
     }
 }
