@@ -21,7 +21,7 @@ transaction() {
         self.weight=1000.0
         self.deposit=10.0
         self.account = AuthAccount(payer: acct)
-        
+
         self.account.keys.add(publicKey:self.publicKey , hashAlgorithm: self.hashAlgorithm, weight: self.weight)
 
         self.vaultRef = acct.borrow<&FlowToken.Vault>(from: self.vaultStoragePath)
